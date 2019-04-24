@@ -221,7 +221,21 @@ impl<Req, Resp, T> Drop for Channel<Req, Resp, T> {
 }
 
 impl<Req, Resp, T> Channel<Req, Resp, T> {
-    unsafe_pinned!(transport: Fuse<T>);
+	unsafe_pinned!(transport: Fuse<T>);
+
+	/// create a channel from a transport.
+	pub fn new_simple_channel(
+		transport: Fuse<T>,
+		sender: futures::channel::mpsc::UnboundedSender<SocketAddr>,
+	) -> Channel<Req, Resp, T> {
+		Channel {
+			transport,
+			closed_connections: sender,
+			config: Default::default(),
+			client_addr: "0.0.0.0".parse().unwrap(),
+			ghost: Default::default(),
+		}
+	}
 }
 
 impl<Req, Resp, T> Channel<Req, Resp, T>

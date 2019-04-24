@@ -89,8 +89,9 @@ fn convert<E: Into<Box<Error + Send + Sync>>>(poll: Poll<Result<(), E>>) -> Poll
     }
 }
 
-impl<Item, SinkItem> rpc::Transport for Transport<TcpStream, Item, SinkItem>
+impl<S, Item, SinkItem> rpc::Transport for Transport<S, Item, SinkItem>
 where
+    S: AsyncRead + AsyncWrite,
     Item: for<'de> Deserialize<'de>,
     SinkItem: Serialize,
 {
@@ -98,11 +99,11 @@ where
     type SinkItem = SinkItem;
 
     fn peer_addr(&self) -> io::Result<SocketAddr> {
-        self.inner.get_ref().get_ref().peer_addr()
+        Ok("0.0.0.0:0".parse().unwrap())
     }
 
     fn local_addr(&self) -> io::Result<SocketAddr> {
-        self.inner.get_ref().get_ref().local_addr()
+        Ok("0.0.0.0:0".parse().unwrap())
     }
 }
 
