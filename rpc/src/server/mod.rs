@@ -232,7 +232,7 @@ impl<Req, Resp, T> Channel<Req, Resp, T> {
 			transport,
 			closed_connections: sender,
 			config: Default::default(),
-			client_addr: "0.0.0.0".parse().unwrap(),
+			client_addr: "0.0.0.0:0".parse().unwrap(),
 			ghost: Default::default(),
 		}
 	}
