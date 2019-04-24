@@ -108,8 +108,9 @@ where
 }
 
 /// Returns a new bincode transport that reads from and writes to `io`.
-pub fn new<Item, SinkItem>(io: TcpStream) -> Transport<TcpStream, Item, SinkItem>
+pub fn new<S, Item, SinkItem>(io: S) -> Transport<S, Item, SinkItem>
 where
+    S: AsyncRead + AsyncWrite,
     Item: for<'de> Deserialize<'de>,
     SinkItem: Serialize,
 {
